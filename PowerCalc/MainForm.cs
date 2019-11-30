@@ -49,6 +49,7 @@ namespace PowerCalc
             try
             {
                 Graphics g = e.Graphics;
+                g.Clear(Color.White);
                 List<Tuple<Color, List<PointF>, Expression>> lines = new List<Tuple<Color, List<PointF>, Expression>>
                     {
                         new Tuple<Color, List<PointF>, Expression>(Color.Red, new List<PointF>(), new Expression(calcBox1.Text)),
