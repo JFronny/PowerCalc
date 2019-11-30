@@ -177,7 +177,7 @@
             // 
             // evalButton
             // 
-            this.evalButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.evalButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.evalButton.Location = new System.Drawing.Point(3, 145);
             this.evalButton.Name = "evalButton";
             this.evalButton.Size = new System.Drawing.Size(59, 23);

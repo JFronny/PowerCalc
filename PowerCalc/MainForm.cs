@@ -35,6 +35,7 @@ namespace PowerCalc
         private void evalButton_Click(object sender, EventArgs e)
         {
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Enabled = false;
             evalThread = new Thread(() =>
             {
                 Bitmap bmp = new Bitmap(evalBox.Width, evalBox.Height);
@@ -50,12 +51,12 @@ namespace PowerCalc
                 {
                     lines.ForEach(s =>
                     {
-                        for (int i = 0; i < evalBox.Width; i++)
+                        for (double i = 0; i < evalBox.Width; i++)
                         {
                             try
                             {
                                 s.Item3.Parameters.Clear();
-                                s.Item3.Parameters.Add("x", i);
+                                s.Item3.Parameters.Add("x", i/10);
                                 double val = -1;
                                 object tmp = s.Item3.Evaluate();
                                 if (tmp.GetType() == typeof(bool))
@@ -86,7 +87,7 @@ namespace PowerCalc
                                     log("Type mismatch! (" + tmp.GetType().ToString() + ")");
                                 float val1 = Convert.ToSingle(val);
                                 if (i >= 0 && i < evalBox.Width && val1 >= 0 && val1 < evalBox.Height)
-                                    s.Item2.Add(new PointF(i, val1));
+                                    s.Item2.Add(new PointF(Convert.ToSingle(i), evalBox.Height - val1));
                             }
                             catch (Exception e1)
                             {
@@ -95,6 +96,7 @@ namespace PowerCalc
 #else
                                 log(e1.Message);
 #endif
+                                break;
                             }
                         }
                         g.DrawLines(new Pen(s.Item1), s.Item2.ToArray());
@@ -112,6 +114,7 @@ namespace PowerCalc
                     Invoke((MethodInvoker)delegate ()
                     {
                         FormBorderStyle = FormBorderStyle.Sizable;
+                        Enabled = true;
                     });
                 }
             });
