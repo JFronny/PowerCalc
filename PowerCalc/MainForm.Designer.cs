@@ -43,6 +43,7 @@
             this.logExpandButton = new System.Windows.Forms.Button();
             this.logBox = new System.Windows.Forms.TextBox();
             this.logCollapseButton = new System.Windows.Forms.Button();
+            this.saveButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -158,6 +159,7 @@
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.AutoScroll = true;
+            this.splitContainer.Panel1.Controls.Add(this.saveButton);
             this.splitContainer.Panel1.Controls.Add(this.coordLabel);
             this.splitContainer.Panel1.Controls.Add(this.evalButton);
             this.splitContainer.Panel1.Controls.Add(this.logExpandButton);
@@ -187,15 +189,16 @@
             this.coordLabel.AutoSize = true;
             this.coordLabel.Location = new System.Drawing.Point(68, 155);
             this.coordLabel.Name = "coordLabel";
-            this.coordLabel.Size = new System.Drawing.Size(0, 13);
+            this.coordLabel.Size = new System.Drawing.Size(44, 13);
             this.coordLabel.TabIndex = 10;
+            this.coordLabel.Text = "{X=,Y=}";
             // 
             // evalButton
             // 
             this.evalButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.evalButton.Location = new System.Drawing.Point(3, 150);
             this.evalButton.Name = "evalButton";
-            this.evalButton.Size = new System.Drawing.Size(59, 23);
+            this.evalButton.Size = new System.Drawing.Size(36, 23);
             this.evalButton.TabIndex = 9;
             this.evalButton.Text = "Eval";
             this.evalButton.UseVisualStyleBackColor = true;
@@ -232,6 +235,17 @@
             this.logCollapseButton.Text = "<<<";
             this.logCollapseButton.UseVisualStyleBackColor = true;
             this.logCollapseButton.Click += new System.EventHandler(this.logCollapseButton_Click);
+            // 
+            // saveButton
+            // 
+            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.saveButton.Location = new System.Drawing.Point(39, 150);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(23, 23);
+            this.saveButton.TabIndex = 11;
+            this.saveButton.Text = "💾";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // MainForm
             // 
@@ -271,6 +285,7 @@
         private System.Windows.Forms.Button logExpandButton;
         private System.Windows.Forms.Button evalButton;
         private System.Windows.Forms.Label coordLabel;
+        private System.Windows.Forms.Button saveButton;
     }
 }
 

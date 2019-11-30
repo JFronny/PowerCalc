@@ -2,15 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace PowerCalc
 {
     public partial class MainForm : Form
     {
-        public MainForm() => InitializeComponent();
+        public MainForm()
+        {
+            InitializeComponent();
+            evalBox_MouseLeave(null, null);
+#if DEBUG
+            logExpandButton_Click(null, null);
+#else
+            logCollapseButton_Click(null, null);
+#endif
+        }
 
         private void logCollapseButton_Click(object sender, EventArgs e)
         {
@@ -130,6 +139,31 @@ namespace PowerCalc
 
         private void evalBox_MouseMove(object sender, MouseEventArgs e) => coordLabel.Text = new Point(e.X, evalBox.Height - e.Y).ToString();
 
-        private void evalBox_MouseLeave(object sender, EventArgs e) => coordLabel.Text = "";
+        private void evalBox_MouseLeave(object sender, EventArgs e) => coordLabel.Text = Point.Empty.ToString().Replace("0", "");
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            ImageFormat[] formats = new ImageFormat[]
+            {
+                ImageFormat.Bmp,
+                ImageFormat.Emf,
+                ImageFormat.Gif,
+                ImageFormat.Jpeg,
+                ImageFormat.Png,
+                ImageFormat.Tiff,
+                ImageFormat.Wmf
+            };
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                FileName = "Graph",
+                Filter = string.Join("|", formats.Select(s => s.ToString() + " Image|*." + (s.ToString() == "Jpeg" ? "jpg" : s.ToString().ToLower())).ToArray())
+            };
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap bmp = new Bitmap(evalBox.Width, evalBox.Height);
+                evalBox_Paint(evalBox, new PaintEventArgs(Graphics.FromImage(bmp), new Rectangle(Point.Empty, bmp.Size)));
+                bmp.Save(dlg.FileName, formats[dlg.FilterIndex - 1]);
+            }
+        }
     }
 }
