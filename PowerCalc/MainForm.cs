@@ -138,7 +138,7 @@ namespace PowerCalc
             }
         }
 
-        private void evalBox_MouseMove(object sender, MouseEventArgs e) => coordLabel.Text = new Point(e.X, evalBox.Height - e.Y).ToString();
+        private void evalBox_MouseMove(object sender, MouseEventArgs e) => coordLabel.Text = new Point((int)Math.Round(e.X / 10d), (int)Math.Round((evalBox.Height - e.Y) / 10d)).ToString();
 
         private void evalBox_MouseLeave(object sender, EventArgs e) => coordLabel.Text = Point.Empty.ToString().Replace("0", "");
 
