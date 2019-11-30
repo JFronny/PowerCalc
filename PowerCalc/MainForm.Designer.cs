@@ -59,7 +59,7 @@
             this.evalBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.evalBox.Location = new System.Drawing.Point(3, 5);
             this.evalBox.Name = "evalBox";
-            this.evalBox.Size = new System.Drawing.Size(254, 146);
+            this.evalBox.Size = new System.Drawing.Size(254, 145);
             this.evalBox.TabIndex = 0;
             this.evalBox.Paint += new System.Windows.Forms.PaintEventHandler(this.evalBox_Paint);
             this.evalBox.MouseLeave += new System.EventHandler(this.evalBox_MouseLeave);
