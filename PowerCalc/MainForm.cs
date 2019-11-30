@@ -1,24 +1,17 @@
 ﻿using NCalc2;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PowerCalc
 {
     public partial class MainForm : Form
     {
-        Thread evalThread;
-        public MainForm()
-        {
-            InitializeComponent();
-        }
+        private Thread evalThread;
+
+        public MainForm() => InitializeComponent();
 
         private void logCollapseButton_Click(object sender, EventArgs e)
         {
@@ -56,7 +49,7 @@ namespace PowerCalc
                             try
                             {
                                 s.Item3.Parameters.Clear();
-                                s.Item3.Parameters.Add("x", i/10);
+                                s.Item3.Parameters.Add("x", i / 10);
                                 double val = -1;
                                 object tmp = s.Item3.Evaluate();
                                 if (tmp.GetType() == typeof(bool))
@@ -121,7 +114,7 @@ namespace PowerCalc
             evalThread.Start();
         }
 
-        void log(string text)
+        private void log(string text)
         {
             Invoke((MethodInvoker)delegate () { logBox.Text = text + "\r\n" + logBox.Text; });
 #if DEBUG

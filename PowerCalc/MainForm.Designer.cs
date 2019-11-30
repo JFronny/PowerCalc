@@ -56,7 +56,7 @@
             this.evalBox.BackColor = System.Drawing.Color.White;
             this.evalBox.Location = new System.Drawing.Point(3, 5);
             this.evalBox.Name = "evalBox";
-            this.evalBox.Size = new System.Drawing.Size(231, 134);
+            this.evalBox.Size = new System.Drawing.Size(231, 147);
             this.evalBox.TabIndex = 0;
             // 
             // calcBox1
@@ -178,7 +178,7 @@
             // evalButton
             // 
             this.evalButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.evalButton.Location = new System.Drawing.Point(3, 145);
+            this.evalButton.Location = new System.Drawing.Point(3, 151);
             this.evalButton.Name = "evalButton";
             this.evalButton.Size = new System.Drawing.Size(59, 23);
             this.evalButton.TabIndex = 9;
@@ -188,8 +188,8 @@
             // 
             // logExpandButton
             // 
-            this.logExpandButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.logExpandButton.Location = new System.Drawing.Point(211, 145);
+            this.logExpandButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.logExpandButton.Location = new System.Drawing.Point(211, 151);
             this.logExpandButton.Name = "logExpandButton";
             this.logExpandButton.Size = new System.Drawing.Size(23, 23);
             this.logExpandButton.TabIndex = 0;
