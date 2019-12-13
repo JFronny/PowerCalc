@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,6 +11,9 @@ namespace PowerCalc
 {
     public partial class MainForm : Form
     {
+        public decimal offX = 0;
+        public decimal offY = 0;
+        Point offStart = Point.Empty;
         public MainForm()
         {
             InitializeComponent();
@@ -35,9 +39,9 @@ namespace PowerCalc
 
         private void eval(object sender, EventArgs e) => evalBox.Invalidate();
 
-        private void log(string text)
+        private void log(object text)
         {
-            Invoke((MethodInvoker)delegate () { logBox.Text = text + "\r\n" + logBox.Text; });
+            logBox.Lines = new string[] { text.ToString() }.Concat(logBox.Lines).Where((s, i) => i < 30).ToArray();
 #if DEBUG
             Console.WriteLine(text);
 #endif
@@ -49,7 +53,11 @@ namespace PowerCalc
             try
             {
                 Graphics g = e.Graphics;
-                g.Clear(Color.White);
+                g.SmoothingMode = SmoothingMode.None;
+                g.InterpolationMode = InterpolationMode.Low;
+                g.CompositingQuality = CompositingQuality.HighSpeed;
+                g.PixelOffsetMode = PixelOffsetMode.None;
+                g.CompositingMode = CompositingMode.SourceCopy;
                 List<Tuple<Color, List<PointF>, Expression>> lines = new List<Tuple<Color, List<PointF>, Expression>>
                     {
                         new Tuple<Color, List<PointF>, Expression>(Color.Red, new List<PointF>(), new Expression(calcBox1.Text)),
@@ -57,13 +65,12 @@ namespace PowerCalc
                         new Tuple<Color, List<PointF>, Expression>(Color.FromArgb(0, 192, 0), new List<PointF>(), new Expression(calcBox3.Text)),
                         new Tuple<Color, List<PointF>, Expression>(Color.FromArgb(0, 0, 192), new List<PointF>(), new Expression(calcBox4.Text))
                     };
-                for (int i = 0; i < evalBox.Width; i += 10)
-                    g.DrawLine(Pens.LightGray, i, 0, i, evalBox.Height);
-                for (int i = evalBox.Height; i > 0; i -= 10)
-                    g.DrawLine(Pens.LightGray, 0, i, evalBox.Width, i);
+                for (int i = (int)(offX % 10); i < evalBox.Width; i += 10)
+                    g.DrawLine((offX - i == 0) ? Pens.Gray : Pens.LightGray, i, 0, i, evalBox.Height);
+                for (int i = evalBox.Height + (int)(offY % 10); i > 0; i -= 10)
+                    g.DrawLine((evalBox.Height + (offY - i) == 0) ? Pens.Gray : Pens.LightGray, 0, i, evalBox.Width, i);
                 lines.ForEach(s =>
                 {
-                    s.Item3.Parameters.Add("x", 0);
                     s.Item3.Parameters.Add("Pi", Math.PI);
                     s.Item3.Parameters.Add("pi", Math.PI);
                     s.Item3.Parameters.Add("PI", Math.PI);
@@ -73,7 +80,7 @@ namespace PowerCalc
                     {
                         try
                         {
-                            s.Item3.Parameters["x"] = i / 10;
+                            s.Item3.Parameters["x"] = (i - (double)offX) / 10;
                             double val = -1;
                             object tmp = s.Item3.Evaluate();
                             if (tmp.GetType() == typeof(bool))
@@ -103,8 +110,9 @@ namespace PowerCalc
                             else
                                 log("Type mismatch! (" + tmp.GetType().ToString() + ")");
                             float val1 = Convert.ToSingle(val);
-                            if (i >= 0 && i < evalBox.Width && val1 >= 0 && val1 < evalBox.Height)
-                                s.Item2.Add(new PointF(Convert.ToSingle(i), evalBox.Height - (val1 * 10)));
+                            float loc = Convert.ToSingle(evalBox.Height - ((val1 * 10) - (float)offY));
+                            if (loc >= 0 && loc < evalBox.Height)
+                                s.Item2.Add(new PointF(Convert.ToSingle(i), loc));
                         }
                         catch (Exception e1)
                         {
@@ -122,7 +130,7 @@ namespace PowerCalc
             }
             catch (Exception e1)
             {
-                log("FATAL: " + e1.ToString());
+                log(e1);
             }
             finally
             {
@@ -138,9 +146,20 @@ namespace PowerCalc
             }
         }
 
-        private void evalBox_MouseMove(object sender, MouseEventArgs e) => coordLabel.Text = new Point((int)Math.Round(e.X / 10d), (int)Math.Round((evalBox.Height - e.Y) / 10d)).ToString();
+        private void evalBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            coordLabel.Text = new Point((int)Math.Round((double)(e.X - offX) / 10d), (int)Math.Round((double)((evalBox.Height - offY) - e.Y) / 10d)).ToString();
+            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                offX += e.X - offStart.X;
+                offY += e.Y - offStart.Y;
+                offStart = e.Location;
+                evalBox.Invalidate();
+            }
+        }
 
         private void evalBox_MouseLeave(object sender, EventArgs e) => coordLabel.Text = Point.Empty.ToString().Replace("0", "");
+        private void evalBox_MouseDown(object sender, MouseEventArgs e) => offStart = e.Location;
 
         private void saveButton_Click(object sender, EventArgs e)
         {

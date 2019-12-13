@@ -38,12 +38,12 @@
             this.calcLabel3 = new System.Windows.Forms.Label();
             this.calcLabel4 = new System.Windows.Forms.Label();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.saveButton = new System.Windows.Forms.Button();
             this.coordLabel = new System.Windows.Forms.Label();
             this.evalButton = new System.Windows.Forms.Button();
             this.logExpandButton = new System.Windows.Forms.Button();
             this.logBox = new System.Windows.Forms.TextBox();
             this.logCollapseButton = new System.Windows.Forms.Button();
-            this.saveButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -62,6 +62,7 @@
             this.evalBox.Size = new System.Drawing.Size(254, 145);
             this.evalBox.TabIndex = 0;
             this.evalBox.Paint += new System.Windows.Forms.PaintEventHandler(this.evalBox_Paint);
+            this.evalBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.evalBox_MouseDown);
             this.evalBox.MouseLeave += new System.EventHandler(this.evalBox_MouseLeave);
             this.evalBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.evalBox_MouseMove);
             // 
@@ -183,6 +184,17 @@
             this.splitContainer.SplitterDistance = 260;
             this.splitContainer.TabIndex = 9;
             // 
+            // saveButton
+            // 
+            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.saveButton.Location = new System.Drawing.Point(39, 150);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(23, 23);
+            this.saveButton.TabIndex = 11;
+            this.saveButton.Text = "💾";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
             // coordLabel
             // 
             this.coordLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -235,17 +247,6 @@
             this.logCollapseButton.Text = "<<<";
             this.logCollapseButton.UseVisualStyleBackColor = true;
             this.logCollapseButton.Click += new System.EventHandler(this.logCollapseButton_Click);
-            // 
-            // saveButton
-            // 
-            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveButton.Location = new System.Drawing.Point(39, 150);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(23, 23);
-            this.saveButton.TabIndex = 11;
-            this.saveButton.Text = "💾";
-            this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // MainForm
             // 
