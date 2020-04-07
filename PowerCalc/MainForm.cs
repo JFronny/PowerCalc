@@ -11,9 +11,9 @@ namespace PowerCalc
 {
     public partial class MainForm : Form
     {
-        private Point offStart = Point.Empty;
-        public decimal offX;
-        public decimal offY;
+        private Point _offStart = Point.Empty;
+        private decimal _offX;
+        private decimal _offY;
 
         public MainForm()
         {
@@ -38,9 +38,9 @@ namespace PowerCalc
             splitContainer.Panel2Collapsed = false;
         }
 
-        private void eval(object sender, EventArgs e) => evalBox.Invalidate();
+        private void Eval(object sender, EventArgs e) => evalBox.Invalidate();
 
-        private void log(object text)
+        private void Log(object text)
         {
             logBox.Lines = new[] {text.ToString()}.Concat(logBox.Lines).Where((s, i) => i < 30).ToArray();
 #if DEBUG
@@ -70,10 +70,10 @@ namespace PowerCalc
                     new Tuple<Color, List<PointF>, Expression>(Color.FromArgb(0, 0, 192), new List<PointF>(),
                         new Expression(calcBox4.Text))
                 };
-                for (int i = (int) (offX % 10); i < evalBox.Width; i += 10)
-                    g.DrawLine(offX - i == 0 ? Pens.Gray : Pens.LightGray, i, 0, i, evalBox.Height);
-                for (int i = evalBox.Height + (int) (offY % 10); i > 0; i -= 10)
-                    g.DrawLine(evalBox.Height + (offY - i) == 0 ? Pens.Gray : Pens.LightGray, 0, i, evalBox.Width, i);
+                for (int i = (int) (_offX % 10); i < evalBox.Width; i += 10)
+                    g.DrawLine(_offX - i == 0 ? Pens.Gray : Pens.LightGray, i, 0, i, evalBox.Height);
+                for (int i = evalBox.Height + (int) (_offY % 10); i > 0; i -= 10)
+                    g.DrawLine(evalBox.Height + (_offY - i) == 0 ? Pens.Gray : Pens.LightGray, 0, i, evalBox.Width, i);
                 lines.ForEach(s =>
                 {
                     s.Item3.Parameters.Add("Pi", Math.PI);
@@ -85,46 +85,64 @@ namespace PowerCalc
                     {
                         try
                         {
-                            s.Item3.Parameters["x"] = (i - (double) offX) / 10;
+                            s.Item3.Parameters["x"] = (i - (double) _offX) / 10;
                             double val = -1;
                             object tmp = s.Item3.Evaluate();
-                            if (tmp.GetType() == typeof(bool))
-                                val = (bool) tmp ? 1 : 0;
-                            else if (tmp.GetType() == typeof(byte))
-                                val = (byte) tmp;
-                            else if (tmp.GetType() == typeof(sbyte))
-                                val = (sbyte) tmp;
-                            else if (tmp.GetType() == typeof(short))
-                                val = (short) tmp;
-                            else if (tmp.GetType() == typeof(ushort))
-                                val = (ushort) tmp;
-                            else if (tmp.GetType() == typeof(int))
-                                val = (int) tmp;
-                            else if (tmp.GetType() == typeof(uint))
-                                val = (uint) tmp;
-                            else if (tmp.GetType() == typeof(long))
-                                val = (long) tmp;
-                            else if (tmp.GetType() == typeof(ulong))
-                                val = (ulong) tmp;
-                            else if (tmp.GetType() == typeof(float))
-                                val = (float) tmp;
-                            else if (tmp.GetType() == typeof(double))
-                                val = (double) tmp;
-                            else if (tmp.GetType() == typeof(decimal))
-                                val = (double) (decimal) tmp;
-                            else
-                                log("Type mismatch! (" + tmp.GetType() + ")");
+                            switch (tmp)
+                            {
+                                case bool b:
+                                    val = b ? 1 : 0;
+                                    break;
+                                case byte b:
+                                    val = b;
+                                    break;
+                                case sbyte o:
+                                    val = o;
+                                    break;
+                                case short o:
+                                    val = o;
+                                    break;
+                                case ushort o:
+                                    val = o;
+                                    break;
+                                case int o:
+                                    val = o;
+                                    break;
+                                case uint u:
+                                    val = u;
+                                    break;
+                                case long l:
+                                    val = l;
+                                    break;
+                                case ulong o:
+                                    val = o;
+                                    break;
+                                case float f:
+                                    val = f;
+                                    break;
+                                case double d:
+                                    val = d;
+                                    break;
+                                case decimal o:
+                                    val = (double) o;
+                                    break;
+                                default:
+                                    Log("Type mismatch! (" + tmp.GetType() + ")");
+                                    break;
+                            }
+
                             float val1 = Convert.ToSingle(val);
-                            float loc = Convert.ToSingle(evalBox.Height - (val1 * 10 - (float) offY));
-                            if (loc >= 0 && loc < evalBox.Height)
-                                s.Item2.Add(new PointF(Convert.ToSingle(i), loc));
+                            float loc = Convert.ToSingle(evalBox.Height - (val1 * 10 - (float) _offY));
+                            PointF tmp2 = new PointF(Convert.ToSingle(i), loc);
+                            if (!new[] {tmp2.X, tmp2.Y}.Any(f => float.IsInfinity(f) || float.IsNaN(f)))
+                                s.Item2.Add(tmp2);
                         }
                         catch (Exception e1)
                         {
 #if DEBUG
                             log("Value error: " + e1);
 #else
-                            log("Value error: " + e1.Message);
+                            Log("Value error: " + e1.Message);
 #endif
                             break;
                         }
@@ -136,11 +154,11 @@ namespace PowerCalc
             }
             catch (Exception e1)
             {
-                log(e1);
+                Log(e1);
             }
             finally
             {
-                log("Eval completed in: " +
+                Log("Eval completed in: " +
                     string.Join(".", (DateTime.Now - start).ToString().Split('.')
                         .Select(s =>
                         {
@@ -154,13 +172,13 @@ namespace PowerCalc
 
         private void evalBox_MouseMove(object sender, MouseEventArgs e)
         {
-            coordLabel.Text = new Point((int) Math.Round((double) (e.X - offX) / 10d),
-                (int) Math.Round((double) (evalBox.Height + offY - e.Y) / 10d)).ToString();
+            coordLabel.Text = new Point((int) Math.Round((double) (e.X - _offX) / 10d),
+                (int) Math.Round((double) (evalBox.Height + _offY - e.Y) / 10d)).ToString();
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
             {
-                offX += e.X - offStart.X;
-                offY += e.Y - offStart.Y;
-                offStart = e.Location;
+                _offX += e.X - _offStart.X;
+                _offY += e.Y - _offStart.Y;
+                _offStart = e.Location;
                 evalBox.Invalidate();
             }
         }
@@ -168,7 +186,7 @@ namespace PowerCalc
         private void evalBox_MouseLeave(object sender, EventArgs e) =>
             coordLabel.Text = Point.Empty.ToString().Replace("0", "");
 
-        private void evalBox_MouseDown(object sender, MouseEventArgs e) => offStart = e.Location;
+        private void evalBox_MouseDown(object sender, MouseEventArgs e) => _offStart = e.Location;
 
         private void saveButton_Click(object sender, EventArgs e)
         {

@@ -214,7 +214,7 @@
             this.evalButton.TabIndex = 9;
             this.evalButton.Text = "Eval";
             this.evalButton.UseVisualStyleBackColor = true;
-            this.evalButton.Click += new System.EventHandler(this.eval);
+            this.evalButton.Click += new System.EventHandler(this.Eval);
             // 
             // logExpandButton
             // 
@@ -258,7 +258,7 @@
             this.MinimumSize = new System.Drawing.Size(266, 243);
             this.Name = "MainForm";
             this.Text = "PowerCalc";
-            this.Resize += new System.EventHandler(this.eval);
+            this.Resize += new System.EventHandler(this.Eval);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel1.PerformLayout();
             this.splitContainer.Panel2.ResumeLayout(false);
