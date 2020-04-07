@@ -82,6 +82,7 @@ namespace PowerCalc
                     s.Item3.Parameters.Add("e", Math.E);
                     s.Item3.Parameters.Add("E", Math.E);
                     for (double i = 0; i < evalBox.Width; i++)
+                    {
                         try
                         {
                             s.Item3.Parameters["x"] = (i - (double) offX) / 10;
@@ -114,7 +115,7 @@ namespace PowerCalc
                             else
                                 log("Type mismatch! (" + tmp.GetType() + ")");
                             float val1 = Convert.ToSingle(val);
-                            float loc = Convert.ToSingle(evalBox.Height - ((val1 * 10) - (float) offY));
+                            float loc = Convert.ToSingle(evalBox.Height - (val1 * 10 - (float) offY));
                             if (loc >= 0 && loc < evalBox.Height)
                                 s.Item2.Add(new PointF(Convert.ToSingle(i), loc));
                         }
@@ -127,6 +128,8 @@ namespace PowerCalc
 #endif
                             break;
                         }
+                    }
+
                     g.DrawLines(new Pen(s.Item1), s.Item2.ToArray());
                 });
                 g.Flush();
@@ -152,7 +155,7 @@ namespace PowerCalc
         private void evalBox_MouseMove(object sender, MouseEventArgs e)
         {
             coordLabel.Text = new Point((int) Math.Round((double) (e.X - offX) / 10d),
-                (int) Math.Round((double) ((evalBox.Height + offY) - e.Y) / 10d)).ToString();
+                (int) Math.Round((double) (evalBox.Height + offY - e.Y) / 10d)).ToString();
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
             {
                 offX += e.X - offStart.X;
