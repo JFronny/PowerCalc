@@ -59,6 +59,7 @@ namespace PowerCalc
                 g.CompositingQuality = CompositingQuality.HighSpeed;
                 g.PixelOffsetMode = PixelOffsetMode.None;
                 g.CompositingMode = CompositingMode.SourceCopy;
+                g.Clear(Color.White);
                 List<Tuple<Color, List<PointF>, Expression>> lines = new List<Tuple<Color, List<PointF>, Expression>>
                 {
                     new Tuple<Color, List<PointF>, Expression>(Color.Red, new List<PointF>(),
