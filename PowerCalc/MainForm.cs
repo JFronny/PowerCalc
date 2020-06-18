@@ -141,7 +141,7 @@ namespace PowerCalc
                         catch (Exception e1)
                         {
 #if DEBUG
-                            log("Value error: " + e1);
+                            Log("Value error: " + e1);
 #else
                             Log("Value error: " + e1.Message);
 #endif
